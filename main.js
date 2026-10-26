@@ -323,7 +323,7 @@ addEventListener('keydown', e => { if (e.key === 'Escape' && !dlg.hidden) closeP
     skills: () => out('backend   Java, Spring Boot, microservices, REST, JWT, Node.js, Laravel, Python, C#\nfrontend  Vue.js, Nuxt.js, HTML5, CSS3, JavaScript\nmobile    Flutter, Dart, Firebase FCM, Play Store / App Store\nembarqué  C, C++, STM32, Arduino, FPGA (Quartus, ModelSim)\ndevops    GitLab CI/CD, Docker, Maven, Nexus, Linux'),
     projects: () => out(projects.map(p => '• ' + p.name).join('\n')),
     stack: () => out('PostgreSQL · Spring Boot · Nuxt.js · Flutter · GitLab CI · Debian/systemd · Raspberry Pi · OVH'),
-    contact: () => out('tassembedoramadan7@gmail.com\n+226 60 48 89 49\nWhatsApp : wa.me/22656412939\ngithub.com/ramadantass', 'c'),
+    contact: () => out('tassembedoramadan7@gmail.com\n+226 60 48 89 49\nWhatsApp : wa.me/22656412939\ngithub.com/engineermomo77', 'c'),
     whatsapp: () => { out('Ouverture de WhatsApp…', 'c'); window.open('https://wa.me/22656412939', '_blank', 'noopener'); },
     cv: () => { out('Téléchargement du CV…', 'c'); const a = document.createElement('a'); a.href = 'assets/CV_Tassembedo_2026.pdf'; a.download = ''; a.click(); },
     theme: () => { $('#theme').click(); out('Thème basculé.', 'm'); },
