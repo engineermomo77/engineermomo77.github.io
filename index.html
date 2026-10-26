@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mohammad Ramadan Tassembedo — Ingénieur logiciel & embarqué</title>
+<meta name="description" content="Ingénieur informatique (BAC+5) à Ouagadougou : Spring Boot, Nuxt.js, Flutter, STM32 et FPGA. Je relie le logiciel et le matériel.">
+<meta name="theme-color" content="#0c0e0d">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230c0e0d'/%3E%3Cpath d='M12 40h10l5-18 8 26 6-16h11' fill='none' stroke='%23ff5a36' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+
+<header class="nav" id="nav">
+  <a class="brand" href="#top" aria-label="Accueil">
+    <svg viewBox="0 0 40 24" width="34" height="20" aria-hidden="true"><path d="M1 14h7l4-11 6 19 5-12h16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span>M.R. Tassembedo</span>
+  </a>
+  <nav class="links" aria-label="Navigation principale">
+    <a href="#apropos">À propos</a>
+    <a href="#dualite">Double compétence</a>
+    <a href="#projets">Projets</a>
+    <a href="#parcours">Parcours</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <button class="theme" id="theme" aria-label="Changer de thème" title="Thème clair / sombre">
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+  </button>
+</header>
+
+<main id="top">
+
+<!-- HERO -->
+<section class="hero">
+  <canvas id="map" aria-hidden="true"></canvas>
+  <div class="hero-inner">
+    <p class="kicker reveal"><span class="dot"></span> Disponible · Ouagadougou, Burkina Faso</p>
+    <h1 class="reveal">
+      <span class="first">Mohammad Ramadan</span>
+      <span class="last">TASSEMBEDO</span>
+    </h1>
+    <p class="statement reveal">
+      Je relie le <em>logiciel</em> et le <em>matériel</em>.<br>
+      <span class="typed-wrap">Je construis <span id="typed" class="typed"></span><span class="caret"></span></span>
+    </p>
+    <div class="cta reveal">
+      <a class="btn primary" href="#projets">Voir mes projets <span>→</span></a>
+      <a class="btn" href="assets/CV_Tassembedo_2026.pdf" download>Télécharger le CV</a>
+    </div>
+    <ul class="stats reveal" id="stats">
+      <li><b data-count="3">0</b><span>plateformes en production</span></li>
+      <li><b data-count="2">0</b><span>apps Flutter Android & iOS</span></li>
+      <li><b data-count="5">0</b><span>expériences en entreprise</span></li>
+      <li><b data-count="2">0</b><span>mondes : code & électronique</span></li>
+    </ul>
+  </div>
+  <div class="hud" aria-hidden="true">
+    <span>LIVE</span><span id="hud-fleet">0 livreurs</span><span>12.3714°N · 1.5197°W</span>
+  </div>
+</section>
+
+<!-- A PROPOS -->
+<section class="section" id="apropos">
+  <div class="wrap about">
+    <figure class="portrait reveal">
+      <img src="assets/portrait.jpg" alt="Portrait de Mohammad Ramadan Tassembedo" width="810" height="1080" loading="lazy">
+      <figcaption>Ouagadougou · 2026</figcaption>
+    </figure>
+    <div>
+      <p class="eyebrow reveal">À propos</p>
+      <h2 class="reveal">Ingénieur, <i>pas seulement</i> développeur.</h2>
+      <p class="lead reveal">Ingénieur informatique (BAC+5), formé à Tunis et à Ouagadougou. Je co-développe et maintiens trois plateformes métiers en production, de l'API au store mobile, et je descends jusqu'au microcontrôleur quand il le faut.</p>
+      <p class="lead reveal">Je m'intéresse à l'apprentissage automatique (détection d'anomalies, maintenance prédictive) et je cherche un poste où relier logiciel et matériel. Hors écran : le football et l'innovation technologique.</p>
+      <div class="snaps reveal">
+        <figure><img src="assets/alioth-1.jpg" alt="Mohammad Ramadan en tenue Alioth System" loading="lazy"><figcaption>Alioth System</figcaption></figure>
+        <figure><img src="assets/alioth-2.jpg" alt="Mohammad Ramadan lors d'un événement Alioth System" loading="lazy"><figcaption>En réunion, Alioth</figcaption></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DUALITE -->
+<section class="section" id="dualite">
+  <div class="wrap">
+    <p class="eyebrow reveal">01 — Double compétence</p>
+    <h2 class="reveal">Du <i>pixel</i> au <i>pin GPIO</i>.</h2>
+    <p class="lead reveal">Peu de profils passent d'un pipeline GitLab CI à un oscilloscope. Déplace le curseur pour voir les deux faces de mon travail.</p>
+
+    <div class="duo reveal" id="duo">
+      <div class="duo-ctrl">
+        <span class="lab l-soft">Logiciel</span>
+        <input type="range" id="duo-range" min="0" max="100" value="0" aria-label="Basculer entre logiciel et matériel">
+        <span class="lab l-hard">Matériel</span>
+      </div>
+      <div class="duo-stage">
+        <canvas id="duo-canvas" aria-hidden="true"></canvas>
+        <div class="duo-panels">
+          <div class="panel soft" id="p-soft">
+            <h3>Logiciel & plateformes</h3>
+            <ul class="tags">
+              <li>Java</li><li>Spring Boot</li><li>Microservices</li><li>API REST · JWT</li>
+              <li>Nuxt.js · Vue.js</li><li>Flutter · Dart</li><li>PostgreSQL · JSONB</li>
+              <li>Node.js</li><li>Laravel</li><li>C# / .NET</li><li>Python</li>
+              <li>GitLab CI/CD</li><li>Docker</li><li>Linux · systemd</li>
+            </ul>
+            <p>API sécurisées, consoles de dispatch temps réel, applications mobiles publiées sur les stores, déploiements sur serveur.</p>
+          </div>
+          <div class="panel hard" id="p-hard">
+            <h3>Embarqué & électronique</h3>
+            <ul class="tags">
+              <li>C / C++</li><li>STM32</li><li>Arduino</li><li>FPGA</li>
+              <li>Quartus</li><li>ModelSim</li><li>Capteurs</li>
+              <li>Machine Learning</li><li>Détection d'anomalies</li><li>Maintenance prédictive</li>
+            </ul>
+            <p>Système de sécurité intégré : détection d'intrusion, contrôle d'accès et vidéosurveillance sur microcontrôleurs.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJETS -->
+<section class="section alt" id="projets">
+  <div class="wrap">
+    <p class="eyebrow reveal">02 — Projets</p>
+    <h2 class="reveal">Ce qui tourne <i>en vrai</i>, chez de vrais utilisateurs.</h2>
+    <p class="lead reveal">Filtre par technologie, clique sur un projet pour le détail.</p>
+    <div class="filters reveal" id="filters" role="group" aria-label="Filtrer par technologie"></div>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<!-- PARCOURS -->
+<section class="section" id="parcours">
+  <div class="wrap">
+    <p class="eyebrow reveal">03 — Parcours</p>
+    <h2 class="reveal">Quatre ans de <i>terrain</i>, un diplôme d'ingénieur.</h2>
+    <div class="tl" id="tl">
+      <div class="tl-line"><div class="tl-fill" id="tl-fill"></div></div>
+      <article class="tl-item reveal">
+        <time>mai 2025 → aujourd'hui</time>
+        <h3>Développeur full-stack & mobile <small>CDD</small></h3>
+        <p class="org">Alioth System / Link2Digit · Ouagadougou</p>
+        <p>Co-développeur et mainteneur d'Eliyah Express, Pegasus et Phebus. API Spring Boot, Nuxt.js, CI/CD GitLab, déploiements Linux. Développement mobile Flutter (Android & iOS) : Eliyah Express Mobile et Alioth Mobile, de la conception à la publication sur les stores. Recueil des besoins, maintenance corrective et évolutive, support aux équipes opérationnelles.</p>
+        <p class="apps"><a href="https://play.google.com/store/apps/details?id=com.alioth.mobility" target="_blank" rel="noopener">Alioth Mobile · Google Play ↗</a><a href="https://apps.apple.com/bf/app/alioth-mobile-app/id6785934335?l=fr-FR" target="_blank" rel="noopener">Alioth Mobile · App Store ↗</a><a href="https://play.google.com/store/apps/details?id=com.link2digit.eliya_express" target="_blank" rel="noopener">Eliyah Express · Google Play ↗</a></p>
+      </article>
+      <article class="tl-item reveal">
+        <time>févr. → mai 2025</time>
+        <h3>Développeur web <small>stage</small></h3>
+        <p class="org">Alioth System · Ouagadougou</p>
+        <p>Projet de fin d'études, point d'entrée vers les plateformes que je maintiens aujourd'hui.</p>
+      </article>
+      <article class="tl-item reveal">
+        <time>mars → sept. 2024</time>
+        <h3>Système embarqué de sécurité <small>stage</small></h3>
+        <p class="org">Ecom.High-Tech · Ouagadougou</p>
+        <p>Détection d'intrusion, contrôle d'accès et vidéosurveillance sur microcontrôleurs programmés en C/C++.</p>
+      </article>
+      <article class="tl-item reveal">
+        <time>janv. → févr. 2024</time>
+        <h3>Développeur Laravel <small>stage</small></h3>
+        <p class="org">Ecom.High-Tech · Ouagadougou</p>
+        <p>Site e-commerce <a href="https://yaare.shop" target="_blank" rel="noopener">yaare.shop</a> : catalogue, commandes, base MySQL.</p>
+      </article>
+      <article class="tl-item reveal">
+        <time>août → sept. 2022</time>
+        <h3>Développeur web <small>stage</small></h3>
+        <p class="org">Heven Tech · Ouagadougou</p>
+        <p>Premier contact avec le développement web en entreprise.</p>
+      </article>
+    </div>
+
+    <div class="edu">
+      <div class="reveal"><span>2021 — 2024</span><h4>Diplôme d'ingénieur informatique (BAC+5)</h4><p>École Supérieure Privée d'Ingénierie et de Technologies, Tunis</p></div>
+      <div class="reveal"><span>2019 — 2021</span><h4>Classes préparatoires (CPGE PCSI)</h4><p>Institut 2iE-EPF, Ouagadougou</p></div>
+      <div class="reveal"><span>2023</span><h4>NVIDIA DLI</h4><p>AI for Anomaly Detection · AI for Predictive Maintenance</p></div>
+      <div class="reveal"><span>2023</span><h4>Coursera</h4><p>Machine Learning with Python · Full Stack App (React & Express)</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section alt" id="contact">
+  <div class="wrap contact">
+    <div>
+      <p class="eyebrow reveal">04 — Contact</p>
+      <h2 class="reveal">Un projet qui touche <i>au code et au fer</i> ?</h2>
+      <p class="lead reveal">Je cherche un poste où relier logiciel et matériel. Écris-moi ou lance une commande dans le terminal.</p>
+      <ul class="contact-list reveal">
+        <li><span>Email</span><a href="mailto:tassembedoramadan7@gmail.com">tassembedoramadan7@gmail.com</a></li>
+        <li><span>Tél.</span><a href="tel:+22660488949">+226 60 48 89 49</a></li>
+        <li><span>WhatsApp</span><a href="https://wa.me/22656412939?text=Bonjour%20Ramadan%2C%20je%20vous%20contacte%20depuis%20votre%20portfolio." target="_blank" rel="noopener">+226 56 41 29 39 · Écrire sur WhatsApp ↗</a></li>
+        <li><span>GitHub</span><a href="https://github.com/ramadantass" target="_blank" rel="noopener">/ramadantass</a></li>
+        <li><span>LinkedIn</span><a href="https://www.linkedin.com/in/ramadan-tassembedo" target="_blank" rel="noopener">/ramadan-tassembedo</a></li>
+      </ul>
+    </div>
+    <div class="term reveal" id="term" aria-label="Terminal interactif">
+      <div class="term-bar"><i></i><i></i><i></i><span>ramadan@ouaga:~</span></div>
+      <div class="term-body" id="term-body" role="log" aria-live="polite"></div>
+      <form class="term-in" id="term-form" autocomplete="off">
+        <label for="term-input">$</label>
+        <input id="term-input" type="text" spellcheck="false" autocapitalize="off" aria-label="Commande">
+      </form>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <span>© 2026 Mohammad Ramadan Tassembedo</span>
+  <span>Fait à la main à Ouagadougou · sans framework</span>
+</footer>
+
+<div id="dlg" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="dlg-title">
+  <div class="modal-box">
+    <button type="button" class="x" id="dlg-close" aria-label="Fermer">✕</button>
+    <div id="dlg-body"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
