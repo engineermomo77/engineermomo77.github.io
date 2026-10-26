@@ -22,6 +22,43 @@ $('#theme').addEventListener('click', () => {
 });
 readPalette();
 
+/* ---------- Statistiques de visite (GoatCounter, anonymes, sans cookies) ---------- */
+// Renseigner le code du compte GoatCounter (ex. 'ramadan' pour ramadan.goatcounter.com). Vide = aucun suivi.
+const GOATCOUNTER_CODE = '';
+if (GOATCOUNTER_CODE && !navigator.doNotTrack?.toString().startsWith('1')) {
+  const s = document.createElement('script');
+  s.async = true; s.src = 'https://gc.zgo.at/count.js';
+  s.dataset.goatcounter = `https://${GOATCOUNTER_CODE}.goatcounter.com/count`;
+  document.head.append(s);
+  $('#stats-note').hidden = false;
+}
+const track = (name) => { try { window.goatcounter?.count?.({ path: name, title: name, event: true }); } catch {} };
+document.addEventListener('click', e => { const a = e.target.closest('[data-track]'); if (a) track(a.dataset.track); });
+
+/* ---------- Langue FR / EN ---------- */
+const { EN, JS: JSS, PEN } = window.I18N;
+const langHooks = [];
+let LANG = store.get('lang') || (/^fr/i.test(navigator.language || 'fr') ? 'fr' : 'en');
+const tr = () => JSS[LANG];
+const i18nEls = $$('[data-i]'), attrEls = $$('[data-ia]');
+i18nEls.forEach(el => el.dataset.fr = el.innerHTML);
+const attrFr = new Map(attrEls.map(el => [el, el.getAttribute(el.dataset.ia.split('|')[0])]));
+const TITLE_FR = document.title, DESC_FR = $('meta[name=description]').content;
+function applyLang() {
+  root.lang = LANG;
+  const en = LANG === 'en';
+  i18nEls.forEach(el => { el.innerHTML = en && EN[el.dataset.i] != null ? EN[el.dataset.i] : el.dataset.fr; });
+  attrEls.forEach(el => { const [a, k] = el.dataset.ia.split('|'); el.setAttribute(a, en && EN[k] != null ? EN[k] : attrFr.get(el)); });
+  document.title = en ? EN.title : TITLE_FR;
+  $('meta[name=description]').content = en ? EN.desc : DESC_FR;
+  $('#cv-btn').href = tr().cv;
+  $('#wa').href = 'https://wa.me/22656412939?text=' + encodeURIComponent(tr().wa);
+  $('#lang').dataset.lang = LANG;
+  langHooks.forEach(f => f());
+}
+function setLang(l) { LANG = l; store.set('lang', l); applyLang(); track('lang-' + l); }
+$('#lang').addEventListener('click', () => setLang(LANG === 'fr' ? 'en' : 'fr'));
+
 /* ---------- Scroll: progress, nav, active link ---------- */
 const nav = $('#nav'), bar = $('#progress');
 const navLinks = $$('.links a');
@@ -63,20 +100,13 @@ function countUp(el) {
 }
 
 /* ---------- Typed line ---------- */
-const phrases = [
-  'des API Spring Boot sécurisées par JWT',
-  'des consoles de dispatch en temps réel',
-  'des apps Flutter publiées sur Google Play',
-  'des firmwares C/C++ sur STM32',
-  'des pipelines GitLab CI/CD',
-  'des systèmes de sécurité embarqués'
-];
 const typed = $('#typed');
-if (reduced) typed.textContent = phrases[0];
+if (reduced) { const set = () => typed.textContent = tr().typed[0]; langHooks.push(set); set(); }
 else {
   let pi = 0, ci = 0, del = false;
   (function tick() {
-    const p = phrases[pi];
+    const phrases = tr().typed, p = phrases[pi];
+    if (ci > p.length) ci = p.length;
     typed.textContent = p.slice(0, ci);
     if (!del && ci === p.length) { del = true; return setTimeout(tick, 1700); }
     if (del && ci === 0) { del = false; pi = (pi + 1) % phrases.length; }
@@ -89,6 +119,8 @@ else {
 (() => {
   const cv = $('#map'), ctx = cv.getContext('2d');
   const hudFleet = $('#hud-fleet');
+  const setHud = () => { if (riders) hudFleet.textContent = riders.length + ' ' + tr().couriers; };
+  langHooks.push(setHud);
   let W, H, dpr, cell, cols, rows, nodes, edges, riders, pins;
   const mouse = { x: -999, y: -999 };
   const rnd = (a, b) => a + Math.random() * (b - a);
@@ -117,7 +149,7 @@ else {
       const a = live[Math.random() * live.length | 0];
       return { a, b: a.n[Math.random() * a.n.length | 0], k: Math.random(), v: rnd(.006, .014), prev: null, trail: [], hue: Math.random() < .35 };
     });
-    hudFleet.textContent = riders.length + ' livreurs';
+    setHud();
   }
 
   function frame(t) {
@@ -260,28 +292,43 @@ const projects = [
     does: ['Catalogue produits', 'Gestion des commandes', 'Base MySQL', 'Développement Laravel (PHP)'],
     stack: ['Laravel', 'PHP', 'MySQL'], link: 'https://yaare.shop' }
 ];
+const P = p => (LANG === 'en' && PEN[p.id]) ? { ...p, ...PEN[p.id] } : p;
+const tag = s => (LANG === 'en' && s === 'Capteurs') ? 'Sensors' : s;
 const grid = $('#grid'), filters = $('#filters');
+const dlg = $('#dlg');
+let currentProject = null, lastFocus = null, firstRender = true;
 const allTags = [...new Set(projects.flatMap(p => p.stack))];
-const mkChip = (label, val) => { const b = document.createElement('button'); b.className = 'chip'; b.textContent = label; b.dataset.v = val; return b; };
-filters.append(mkChip('Tout', ''), ...allTags.map(t => mkChip(t, t)));
+const mkChip = (val) => { const b = document.createElement('button'); b.className = 'chip'; b.dataset.v = val; return b; };
+filters.append(mkChip(''), ...allTags.map(mkChip));
 filters.firstChild.classList.add('on');
-projects.forEach((p, i) => {
-  const c = document.createElement('button');
-  c.className = 'card reveal'; c.dataset.stack = p.stack.join('|'); c.dataset.id = p.id;
-  c.innerHTML = `<div class="no"><span>0${i + 1}</span><span class="kind">${p.kind}</span></div>
-    <h3>${p.name}</h3><p>${p.blurb}</p>
-    <ul class="tags">${p.stack.map(s => `<li>${s}</li>`).join('')}</ul><span class="more">Voir le détail →</span>`;
-  c.addEventListener('pointermove', e => { const r = c.getBoundingClientRect(); c.style.setProperty('--mx', (e.clientX - r.left) + 'px'); c.style.setProperty('--my', (e.clientY - r.top) + 'px'); });
-  c.addEventListener('click', () => openProject(p));
-  grid.append(c); io.observe(c);
-});
+const applyFilter = () => {
+  const v = $('.chip.on', filters).dataset.v;
+  $$('.card', grid).forEach(c => c.classList.toggle('off', !!v && !c.dataset.stack.split('|').includes(v)));
+};
+function renderProjects() {
+  $$('.chip', filters).forEach(b => b.textContent = b.dataset.v ? tag(b.dataset.v) : tr().all);
+  grid.replaceChildren();
+  projects.forEach((p0, i) => {
+    const p = P(p0), c = document.createElement('button');
+    c.className = 'card reveal' + (firstRender ? '' : ' in'); c.dataset.stack = p0.stack.join('|'); c.dataset.id = p0.id;
+    c.innerHTML = `<div class="no"><span>0${i + 1}</span><span class="kind">${p.kind}</span></div>
+      <h3>${p.name}</h3><p>${p.blurb}</p>
+      <ul class="tags">${p0.stack.map(s => `<li>${tag(s)}</li>`).join('')}</ul><span class="more">${tr().more}</span>`;
+    c.addEventListener('pointermove', e => { const r = c.getBoundingClientRect(); c.style.setProperty('--mx', (e.clientX - r.left) + 'px'); c.style.setProperty('--my', (e.clientY - r.top) + 'px'); });
+    c.addEventListener('click', () => openProject(p0));
+    grid.append(c); if (firstRender) io.observe(c);
+  });
+  firstRender = false;
+  applyFilter();
+  if (!dlg.hidden && currentProject) fillProject(currentProject);
+}
 filters.addEventListener('click', e => {
   const b = e.target.closest('.chip'); if (!b) return;
   $$('.chip', filters).forEach(x => x.classList.toggle('on', x === b));
-  $$('.card', grid).forEach(c => c.classList.toggle('off', !!b.dataset.v && !c.dataset.stack.split('|').includes(b.dataset.v)));
+  applyFilter();
 });
-const dlg = $('#dlg');
-let lastFocus = null;
+langHooks.push(renderProjects);
+
 function qrSvg(url) {
   try { const q = qrcode(0, 'M'); q.addData(url); q.make(); return q.createSvgTag({ cellSize: 4, margin: 0, scalable: true }); }
   catch { return ''; }
@@ -290,24 +337,29 @@ function storesHtml(p) {
   if (!p.stores) return '';
   const defs = [['play', 'Google Play', 'Android'], ['apple', 'App Store', 'iPhone & iPad']];
   const items = defs.map(([k, name, os]) => {
-    const url = p.stores[k];
-    if (!url) return `<div class="store soon"><div><b>${name}</b><small>${os} · ${p.stores[k + 'Note'] || 'bientôt disponible'}</small></div></div>`;
+    const url = p.stores[k], note = p.stores[k + 'Note'];
+    if (!url) return `<div class="store soon"><div><b>${name}</b><small>${os} · ${note ? (LANG === 'en' ? 'under Apple review' : note) : tr().soon}</small></div></div>`;
     return `<div class="store"><div class="qr" aria-hidden="true">${qrSvg(url)}</div>
-      <div><b>${name}</b><small>${os} · scanne ou clique</small><a href="${url}" target="_blank" rel="noopener">Ouvrir ↗</a></div></div>`;
+      <div><b>${name}</b><small>${os} · ${tr().scan}</small><a href="${url}" target="_blank" rel="noopener" data-track="store-${p.id}-${k}">${tr().open}</a></div></div>`;
   });
-  return `<div class="stores"><h4>TÉLÉCHARGER L'APPLICATION</h4><div class="store-row">${items.join('')}</div></div>`;
+  return `<div class="stores"><h4>${tr().dl}</h4><div class="store-row">${items.join('')}</div></div>`;
 }
-function openProject(p) {
-  lastFocus = document.activeElement;
+function fillProject(p0) {
+  const p = P(p0);
   $('#dlg-body').innerHTML = `<span class="sub">${p.kind}</span><h3 id="dlg-title">${p.name}</h3><p class="ctx">${p.ctx}</p>
     <ul class="do">${p.does.map(d => `<li>${d}</li>`).join('')}</ul>
-    <ul class="tags">${p.stack.map(s => `<li>${s}</li>`).join('')}</ul>
+    <ul class="tags">${p0.stack.map(s => `<li>${tag(s)}</li>`).join('')}</ul>
     ${storesHtml(p)}
-    ${p.link ? `<a class="live" href="${p.link}" target="_blank" rel="noopener">${p.link.replace('https://', '')} ↗</a>` : ''}`;
+    ${p.link ? `<a class="live" href="${p.link}" target="_blank" rel="noopener" data-track="live-${p.id}">${p.link.replace('https://', '')} ↗</a>` : ''}`;
+}
+function openProject(p0) {
+  lastFocus = document.activeElement; currentProject = p0;
+  fillProject(p0);
   dlg.hidden = false; document.body.classList.add('lock');
   $('.modal-box', dlg).scrollTop = 0; $('#dlg-close').focus();
+  track('project-' + p0.id);
 }
-function closeProject() { dlg.hidden = true; document.body.classList.remove('lock'); if (lastFocus) lastFocus.focus({ preventScroll: true }); }
+function closeProject() { dlg.hidden = true; currentProject = null; document.body.classList.remove('lock'); if (lastFocus) lastFocus.focus({ preventScroll: true }); }
 dlg.addEventListener('click', e => { if (e.target === dlg) closeProject(); });
 $('#dlg-close').addEventListener('click', closeProject);
 addEventListener('keydown', e => { if (e.key === 'Escape' && !dlg.hidden) closeProject(); });
@@ -318,20 +370,21 @@ addEventListener('keydown', e => { if (e.key === 'Escape' && !dlg.hidden) closeP
   const hist = []; let hi = 0;
   const out = (txt, cls = '') => { const d = document.createElement('div'); if (cls) d.className = cls; d.textContent = txt; body.append(d); body.scrollTop = body.scrollHeight; };
   const cmds = {
-    help: () => out('Commandes : whoami · skills · projects · stack · contact · whatsapp · cv · theme · clear', 'm'),
-    whoami: () => out('Mohammad Ramadan Tassembedo — ingénieur informatique (BAC+5), double compétence logiciel & électronique. Ouagadougou.'),
-    skills: () => out('backend   Java, Spring Boot, microservices, REST, JWT, Node.js, Laravel, Python, C#\nfrontend  Vue.js, Nuxt.js, HTML5, CSS3, JavaScript\nmobile    Flutter, Dart, Firebase FCM, Play Store / App Store\nembarqué  C, C++, STM32, Arduino, FPGA (Quartus, ModelSim)\ndevops    GitLab CI/CD, Docker, Maven, Nexus, Linux'),
-    projects: () => out(projects.map(p => '• ' + p.name).join('\n')),
+    help: () => out(tr().t_help, 'm'),
+    whoami: () => out(tr().t_whoami),
+    skills: () => out(tr().t_skills),
+    projects: () => out(projects.map(p => '• ' + P(p).name).join('\n')),
     stack: () => out('PostgreSQL · Spring Boot · Nuxt.js · Flutter · GitLab CI · Debian/systemd · Raspberry Pi · OVH'),
     contact: () => out('tassembedoramadan7@gmail.com\n+226 60 48 89 49\nWhatsApp : wa.me/22656412939\ngithub.com/engineermomo77', 'c'),
-    whatsapp: () => { out('Ouverture de WhatsApp…', 'c'); window.open('https://wa.me/22656412939', '_blank', 'noopener'); },
-    cv: () => { out('Téléchargement du CV…', 'c'); const a = document.createElement('a'); a.href = 'assets/CV_Tassembedo_2026.pdf'; a.download = ''; a.click(); },
-    theme: () => { $('#theme').click(); out('Thème basculé.', 'm'); },
+    whatsapp: () => { out(tr().t_wa, 'c'); track('contact-whatsapp-terminal'); window.open('https://wa.me/22656412939?text=' + encodeURIComponent(tr().wa), '_blank', 'noopener'); },
+    cv: () => { out(tr().t_cv, 'c'); track('cv-download-terminal'); const a = document.createElement('a'); a.href = tr().cv; a.download = ''; a.click(); },
+    lang: () => { setLang(LANG === 'fr' ? 'en' : 'fr'); out(tr().t_lang, 'c'); },
+    theme: () => { $('#theme').click(); out(tr().t_theme, 'm'); },
     clear: () => body.replaceChildren(),
-    sudo: () => out('Bien tenté. Mais je préfère qu\'on m\'écrive : contact', 'e'),
+    sudo: () => out(tr().t_sudo, 'e'),
     ls: () => out('eliyah/  pegasus/  phebus/  securite-integree/  yaare.shop/', 'm')
   };
-  out('Bienvenue. Tape "help" pour commencer.', 'm');
+  out(tr().t_welcome, 'm');
   form.addEventListener('submit', e => {
     e.preventDefault();
     const v = input.value.trim(); input.value = '';
@@ -339,7 +392,7 @@ addEventListener('keydown', e => { if (e.key === 'Escape' && !dlg.hidden) closeP
     hist.push(v); hi = hist.length;
     out('$ ' + v, 'm');
     const key = v.split(/\s+/)[0].toLowerCase();
-    (cmds[key] || (() => out(`${key} : commande introuvable. Essaie "help".`, 'e')))();
+    (cmds[key] || (() => out(tr().t_nf(key), 'e')))();
   });
   input.addEventListener('keydown', e => {
     if (e.key === 'ArrowUp' && hi > 0) { input.value = hist[--hi]; e.preventDefault(); }
@@ -347,4 +400,6 @@ addEventListener('keydown', e => { if (e.key === 'Escape' && !dlg.hidden) closeP
   });
   $('#term').addEventListener('click', () => input.focus({ preventScroll: true }));
 })();
+
+applyLang();
 })();

@@ -28,6 +28,11 @@ a{color:inherit}
 .links a{text-decoration:none;color:var(--mute);transition:color .2s;position:relative}
 .links a:hover,.links a.on{color:var(--ink)}
 .links a.on::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;background:var(--hot)}
+.tools{display:flex;align-items:center;gap:10px}
+.lang{display:flex;align-items:center;gap:7px;height:38px;padding:0 14px;border-radius:99px;border:1px solid var(--line);background:none;color:var(--mute);font-family:var(--f-mono);font-size:12.5px;cursor:pointer;transition:.2s}
+.lang:hover{border-color:var(--hot)}
+.lang i{width:1px;height:14px;background:var(--line)}
+.lang[data-lang="fr"] [data-l="fr"],.lang[data-lang="en"] [data-l="en"]{color:var(--ink);font-weight:600}
 .theme{background:none;border:1px solid var(--line);color:var(--ink);width:38px;height:38px;border-radius:50%;cursor:pointer;display:grid;place-items:center;transition:.2s}
 .theme:hover{border-color:var(--hot);color:var(--hot);transform:rotate(25deg)}
 
