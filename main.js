@@ -24,7 +24,7 @@ readPalette();
 
 /* ---------- Statistiques de visite (GoatCounter, anonymes, sans cookies) ---------- */
 // Renseigner le code du compte GoatCounter (ex. 'ramadan' pour ramadan.goatcounter.com). Vide = aucun suivi.
-const GOATCOUNTER_CODE = '';
+const GOATCOUNTER_CODE = 'engineermomo';
 if (GOATCOUNTER_CODE && !navigator.doNotTrack?.toString().startsWith('1')) {
   const s = document.createElement('script');
   s.async = true; s.src = 'https://gc.zgo.at/count.js';
